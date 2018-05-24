@@ -1,4 +1,4 @@
-all: build/image.iso
+all: clean build/image.iso
 
 run: all
 	qemu-system-i386 -boot d -cdrom build/image.iso
@@ -12,7 +12,7 @@ build/kernel.bin: build/kernel.o build/boot.o
 
 build/%.o: kernel/%.c
 	mkdir -p build/image/boot/grub
-	gcc -fno-stack-protector -fno-builtin -nostdinc -O -g -Wall -Ikernel -c -o $@ $^ -m32
+	gcc -fno-stack-protector -fno-builtin -O -g -Wall -Ikernel -c -o $@ $^ -m32
 
 build/boot.o: boot/boot.asm
 	nasm -f elf -o build/boot.o boot/boot.asm

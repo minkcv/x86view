@@ -1,7 +1,7 @@
 # NeoIRIX
 ### Building and running on linux
 #### Install 
-    sudo apt install qemu nasm
+    sudo apt install qemu nasm gcc-multilib
 
 #### Build
     make
