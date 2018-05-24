@@ -1,3 +1,4 @@
+#include "../drivers/vga_screen.h"
 #include <stdint.h>
 
 void kernel_main()

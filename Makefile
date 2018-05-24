@@ -1,20 +1,25 @@
-all: clean build/image.iso
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h)
+OBJECTS = $(notdir $(C_SOURCES:.c=.o))
+
+all: clean image.iso
 
 run: all
 	qemu-system-i386 -boot d -cdrom build/image.iso
 
-build/image.iso: build/kernel.bin 
+image.iso: kernel.bin 
 	cp grub.cfg build/image/boot/grub/
 	grub-mkrescue -o build/image.iso build/image
 
-build/kernel.bin: build/kernel.o build/boot.o
-	ld -T link.ld -o build/image/boot/kernel.bin build/boot.o build/kernel.o -m elf_i386
+kernel.bin: boot.o $(OBJECTS)
+	ld -T link.ld -o build/image/boot/$@ $(addprefix build/,$^) -m elf_i386
 
-build/%.o: kernel/%.c
+%.o: */%.c 
 	mkdir -p build/image/boot/grub
-	gcc -fno-stack-protector -fno-builtin -O -g -Wall -Ikernel -c -o $@ $^ -m32
+	gcc -m32 -fno-stack-protector -fno-builtin -O -Wall -Ikernel:drivers -c $< -o $(addprefix build/, $@)
 
-build/boot.o: boot/boot.asm
+boot.o: boot/boot.asm
+	mkdir -p build/image/boot/grub
 	nasm -f elf -o build/boot.o boot/boot.asm
 
 clean:
