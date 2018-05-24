@@ -1,5 +1,8 @@
 all: build/image.iso
 
+run: all
+	qemu-system-i386 -boot d -cdrom build/image.iso
+
 build/image.iso: build/kernel.bin 
 	cp grub.cfg build/image/boot/grub/
 	grub-mkrescue -o build/image.iso build/image
