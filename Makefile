@@ -2,7 +2,7 @@ C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJECTS = $(notdir $(C_SOURCES:.c=.o))
 
-all: clean image.iso
+all: image.iso
 
 run: all
 	qemu-system-i386 -boot d -cdrom build/image.iso
@@ -16,7 +16,7 @@ kernel.bin: boot.o $(OBJECTS)
 
 %.o: */%.c 
 	mkdir -p build/image/boot/grub
-	gcc -m32 -fno-stack-protector -fno-builtin -O -Wall -Ikernel:drivers -c $< -o $(addprefix build/, $@)
+	gcc -m32 -fno-stack-protector -fno-builtin -O -Wall -I. -c $< -o $(addprefix build/, $@)
 
 boot.o: boot/boot.asm
 	mkdir -p build/image/boot/grub
