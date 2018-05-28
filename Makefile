@@ -1,4 +1,4 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+C_SOURCES = $(shell find . -name *.c)
 HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJECTS = $(notdir $(C_SOURCES:.c=.o))
 
