@@ -1,5 +1,6 @@
 #include "drivers/vga_console.h"
 #include "memory.h"
+#include "io.h"
 #include <stdint.h>
 
 
@@ -9,6 +10,13 @@ void printhex(uint8_t value);
 
 void kernel_main()
 {
+    while (true)
+    {
+        while (!(inb(0x64) & 1));
+        uint8_t c = inb(0x60);
+        print_byte_hex((c >> 4) & 0xF);
+        print_byte_hex(c & 0xF);
+    }
     /*
     uint8_t* memory = (uint8_t*)0x100000;
     int i;
@@ -20,8 +28,8 @@ void kernel_main()
     }
     */
 
-    print_string("Hello world!\n");
-    print_string("welcome to the danger zone");
+    //print_string("Hello world!\n");
+    //print_string("welcome to the danger zone");
 
     //bool enabled = a20Enabled();
     //if (enabled)
