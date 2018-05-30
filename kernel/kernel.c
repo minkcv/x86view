@@ -5,11 +5,14 @@
 
 
 bool a20Enabled();
+bool interruptsEnabled();
 void print(uint8_t value);
 void printhex(uint8_t value);
 
 void kernel_main()
 {
+    if (interruptsEnabled())
+        print_char('E');
     while (true)
     {
         while (!(inb(0x64) & 1));
@@ -49,5 +52,13 @@ bool a20Enabled()
     print_byte_hex(*odd);
     print_byte_hex(*even);
     return *odd != *even;
+}
+
+bool interruptsEnabled()
+{
+    uint32_t flags;
+    asm volatile ("pushf\n"
+                  "pop %0" : "=g"(flags));
+    return flags & 0x200;
 }
 
