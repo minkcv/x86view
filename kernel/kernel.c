@@ -1,19 +1,18 @@
 #include "drivers/vga_console.h"
+#include "drivers/keyboard.h"
 #include "memory.h"
 #include "io.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 
 bool a20Enabled();
-void print(uint8_t value);
-void printhex(uint8_t value);
 
 void kernel_main()
 {
     while (true)
     {
-        while (!(inb(0x64) & 1));
-        uint8_t c = inb(0x60);
+        char c = get_key();
         print_byte_hex((c >> 4) & 0xF);
         print_byte_hex(c & 0xF);
     }
