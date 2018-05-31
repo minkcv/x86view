@@ -34,6 +34,8 @@ char get_char(uint8_t keycode)
         return keycode + 47;
     switch (keycode)
     {
+        case KEY_ENTER:
+            return '\n';
         case KEY_0:
             return '0';
         case KEY_MINUS:

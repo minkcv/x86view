@@ -11,15 +11,17 @@
 
 int cursor_position;
 
-extern void print_byte_hex(uint8_t byte);
+void print_byte_hex(uint8_t byte);
 
-extern void print_string(char* str);
+void print_string(char* str);
 
-extern void print_char(char c);
+void print_char(char c);
 
-extern void print_newline();
+void print_newline();
 
-extern void set_cursor_pos(uint8_t row, uint8_t col);
+void console_backspace();
+
+void set_cursor_pos(uint8_t row, uint8_t col);
 
 #endif
 

@@ -26,6 +26,11 @@ void print_string(char* str)
 
 void print_char(char c)
 {
+    if (c == '\n')
+    {
+        print_newline();
+        return;
+    }
     uint8_t* memptr = (uint8_t*) VIDEO_MEMORY_START + cursor_position;
     memset(memptr, c, 1);
     memset(memptr + 1, VGA_WHITE_ON_BLACK, 1);
@@ -36,6 +41,13 @@ void print_newline()
 {
     uint8_t rows = cursor_position / CONSOLE_COLS;
     cursor_position = ((rows + 1) * CONSOLE_COLS) * BYTES_PER_CHAR;
+}
+
+void console_backspace()
+{
+    cursor_position -= BYTES_PER_CHAR;
+    print_char(' ');
+    cursor_position -= BYTES_PER_CHAR;
 }
 
 void set_cursor_pos(uint8_t row, uint8_t col)

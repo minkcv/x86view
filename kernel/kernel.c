@@ -1,5 +1,6 @@
 #include "drivers/vga_console.h"
 #include "drivers/keyboard.h"
+#include "drivers/scancodes.h"
 #include "memory.h"
 #include "io.h"
 #include <stdbool.h>
@@ -13,12 +14,13 @@ void kernel_main()
     while (true)
     {
         uint8_t k = get_keycode();
-        char c = get_char(k);
-        if (c != '\0')
+        if (k == KEY_BACKSPACE)
+            console_backspace();
+        else
         {
-            print_char(c);
-            //print_byte_hex((c >> 4) & 0xF);
-            //print_byte_hex(c & 0xF);
+            char c = get_char(k);
+            if (c != '\0')
+                print_char(c);
         }
     }
     /*
