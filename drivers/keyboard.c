@@ -13,13 +13,17 @@ uint8_t get_keycode()
     
     if (scancode < KEY_DOWN_END)
     {
+        // Key Pressed
         pressed_keys |= scancode;
         return scancode;
     }
     else if (scancode < KEY_UP_END)
     {
+        // Key Released
         pressed_keys &= ~(scancode - KEY_DOWN_END);
-        return scancode - KEY_DOWN_END;
+        // Don't return a keycode if a key is released
+        return 0;
+        //return scancode - KEY_DOWN_END;
     }
     return 0;
 }
