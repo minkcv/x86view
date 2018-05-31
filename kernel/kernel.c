@@ -1,6 +1,7 @@
 #include "drivers/vga_console.h"
 #include "drivers/keyboard.h"
 #include "drivers/scancodes.h"
+#include "prompt.h"
 #include "memory.h"
 #include "io.h"
 #include <stdbool.h>
@@ -12,18 +13,7 @@ bool a20Enabled();
 void kernel_main()
 {
     console_clear();
-    while (true)
-    {
-        uint8_t k = get_keycode();
-        if (k == KEY_BACKSPACE)
-            console_backspace();
-        else
-        {
-            char c = get_char(k);
-            if (c != '\0')
-                print_char(c);
-        }
-    }
+    prompt_run();
     /*
     uint8_t* memory = (uint8_t*)0x100000;
     int i;
