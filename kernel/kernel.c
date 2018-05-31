@@ -11,6 +11,7 @@ bool a20Enabled();
 
 void kernel_main()
 {
+    console_clear();
     while (true)
     {
         uint8_t k = get_keycode();

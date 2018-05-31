@@ -21,6 +21,8 @@ void print_newline();
 
 void console_backspace();
 
+void console_clear();
+
 void set_cursor_pos(uint8_t row, uint8_t col);
 
 #endif
