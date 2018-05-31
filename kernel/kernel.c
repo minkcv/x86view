@@ -12,9 +12,14 @@ void kernel_main()
 {
     while (true)
     {
-        char c = get_key();
-        print_byte_hex((c >> 4) & 0xF);
-        print_byte_hex(c & 0xF);
+        uint8_t k = get_keycode();
+        char c = get_char(k);
+        if (c != '\0')
+        {
+            print_char(c);
+            //print_byte_hex((c >> 4) & 0xF);
+            //print_byte_hex(c & 0xF);
+        }
     }
     /*
     uint8_t* memory = (uint8_t*)0x100000;
