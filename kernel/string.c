@@ -2,7 +2,7 @@
 
 char* strcat(char* dest, char* src)
 {
-    size_t end = strlen(dest) + 1;
+    size_t end = strlen(dest);
     size_t new_length = end + strlen(src);
     int i;
     for (i = end; i < new_length; i++)

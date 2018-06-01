@@ -1,4 +1,5 @@
 #include "prompt.h"
+#include "string.h"
 #include "memory.h"
 #include "drivers/scancodes.h"
 #include "drivers/keyboard.h"
@@ -27,6 +28,7 @@ void prompt_run()
         {
             parse_command(buffer);
             memset(buffer, 0, length);
+            length = 0;
             print_newline();
             print_prompt();
         }
@@ -36,9 +38,9 @@ void prompt_run()
             if (c != '\0')
             {
                 print_char(c);
+                strcat(buffer, &c);
                 length++;
             }
-            //strcat(buffer, (char*)c);
         }
     }
 }
