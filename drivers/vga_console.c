@@ -3,13 +3,33 @@
 
 void print_byte_hex(uint8_t byte)
 {
+    uint8_t hex_digit_1 = (byte >> 4) & 0xF;
+    uint8_t hex_digit_2 = byte & 0xF;
+    print_hex_digit(hex_digit_1);
+    print_hex_digit(hex_digit_2);
+}
+
+void print_hex_digit(uint8_t value)
+{
     uint8_t* memptr = (uint8_t*) VIDEO_MEMORY_START + cursor_position;
-    if (byte < 10)
-        memset(memptr, byte + 48, 1);
+    if (value < 10)
+        memset(memptr, value + 48, 1);
     else
-        memset(memptr, byte + 55, 1);
+        memset(memptr, value + 55, 1);
     memset(memptr + 1, VGA_WHITE_ON_BLACK, 1);
     cursor_position += BYTES_PER_CHAR;
+}
+
+void print_u32_hex(uint32_t i)
+{
+    print_hex_digit((i >> 28) & 0xF);
+    print_hex_digit((i >> 24) & 0xF);
+    print_hex_digit((i >> 20) & 0xF);
+    print_hex_digit((i >> 16) & 0xF);
+    print_hex_digit((i >> 12) & 0xF);
+    print_hex_digit((i >> 8) & 0xF);
+    print_hex_digit((i >> 4) & 0xF);
+    print_hex_digit(i & 0xF);
 }
 
 void print_string(char* str)

@@ -11,7 +11,6 @@
 
 void prompt_run()
 {
-    cmd_read_single = "r";
     char* buffer = (char*)0x7E00; // TODO where to put this in memory?
     size_t length = 0;
     print_prompt();
@@ -53,6 +52,20 @@ void print_prompt()
 void parse_command(char* cmd)
 {
     print_newline();
-    print_string(cmd);
+    if (strncmp(cmd, cmd_read_single, strlen(cmd_read_single)) == 0)
+    {
+        char* arg = strchr(cmd, ' ') + 1;
+        print_newline();
+        uint32_t addr = parse_int_hex(arg);
+        print_u32_hex(addr);
+        print_string(": ");
+        uint8_t* addr_ptr = (uint8_t*)addr;
+        print_byte_hex(*addr_ptr);
+    }
+    else
+    {
+        print_string("Unknown command: ");
+        print_string(cmd);
+    }
 }
 

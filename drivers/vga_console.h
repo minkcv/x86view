@@ -13,6 +13,10 @@ int cursor_position;
 
 void print_byte_hex(uint8_t byte);
 
+void print_hex_digit(uint8_t value);
+
+void print_u32_hex(uint32_t i);
+
 void print_string(char* str);
 
 void print_char(char c);

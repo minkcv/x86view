@@ -1,11 +1,11 @@
 #ifndef PROMPT_H
 #define PROMPT_H
 
-char* cmd_read_single;
-char* cmd_read_n;
-char* cmd_write_single;
-char* cmd_write_n;
-char* cmd_help;
+static const char* cmd_read_single = "R";
+static const char* cmd_read_n = "RN";
+static const char* cmd_write_single = "W";
+static const char* cmd_write_n = "WN";
+static const char* cmd_help = "HELP";
 
 void prompt_run();
 

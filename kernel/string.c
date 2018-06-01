@@ -13,9 +13,13 @@ char* strcat(char* dest, char* src)
 
 int strcmp(char* str1, char* str2)
 {
+    return strncmp(str1, str2, strlen(str1));
+}
+
+int strncmp(char* str1, char* str2, size_t num)
+{
     int i;
-    int length = strlen(str1);
-    for (i = 0; i < length; i++)
+    for (i = 0; i < num; i++)
     {
         if (str1[i] != str2[i])
             return str1[i] - str2[i];
@@ -40,5 +44,37 @@ size_t strlen(char* str)
         length++;
 
     return length;
+}
+
+char* strchr(char* str, char c)
+{
+    int i;
+    for (i = 0; str[i] != c; i++)
+        if (str[i] == '\0')
+            return 0;
+
+    return &(str[i]);
+}
+
+uint32_t parse_int_hex(char* str)
+{
+    uint32_t value = 0;
+    int i;
+    size_t length = strlen(str);
+    for (i = 0; i < length; i++)
+    {
+        int place = (length - i - 1);
+        int weight = 1;
+        int pow;
+        for (pow = 0; pow < place; pow++)
+            weight *= 16;
+        if (str[i] > 47 && str[i] < 58)
+            value += (str[i] - 48) * weight;
+        else if (str[i] > 64 && str[i] < 71)
+            value += (str[i] - 65 + 10) * weight;
+        else
+            return 0;
+    }
+    return value;
 }
 
