@@ -20,8 +20,8 @@ void prompt_run()
         uint8_t k = get_keycode();
         if (k == KEY_BACKSPACE && length > 0)
         {
-            buffer[length] = '\0';
             length--;
+            buffer[length] = '\0';
             console_backspace();
         }
         else if (k == KEY_ENTER)
