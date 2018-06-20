@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 char* strcat(char* dest, char* src);
 
@@ -16,7 +17,9 @@ size_t strlen(char* str);
 
 char* strchr(char* str, char c);
 
-uint32_t parse_int_hex(char* str);
+uint32_t parse_int(char* str, bool* failure);
+
+uint32_t parse_int_hex(char* str, bool* failure);
 
 #endif
 

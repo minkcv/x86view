@@ -12,7 +12,6 @@ bool a20Enabled();
 
 void kernel_main()
 {
-    console_clear();
     prompt_run();
     /*
     uint8_t* memory = (uint8_t*)0x100000;

@@ -39,6 +39,8 @@ void print_string(char* str)
     {
         if (*(str + i) == '\n')
             print_newline();
+        else if (*(str + i) == '\t')
+            print_string("    "); // 4 spaces
         else
             print_char(*(str + i));
     }

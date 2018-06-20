@@ -13,6 +13,7 @@ void prompt_run()
 {
     char* buffer = (char*)0x7E00; // TODO where to put this in memory?
     size_t length = 0;
+    console_clear();
     print_prompt();
     while (true)
     {
@@ -52,20 +53,76 @@ void print_prompt()
 void parse_command(char* cmd)
 {
     print_newline();
-    if (strncmp(cmd, cmd_read_single, strlen(cmd_read_single)) == 0)
+    bool parse_failure;
+    char* args = strchr(cmd, ' ');
+    if (args == NULL)
     {
-        char* arg = strchr(cmd, ' ') + 1;
-        print_newline();
-        uint32_t addr = parse_int_hex(arg);
-        print_u32_hex(addr);
-        print_string(": ");
-        uint8_t* addr_ptr = (uint8_t*)addr;
-        print_byte_hex(*addr_ptr);
+        print_usage(cmd);
+        return;
+    }
+    *(args) = '\0';
+    args++; // Move pointer past '\0' character.
+    if (strcmp(cmd, cmd_read) == 0)
+    {
+        uint32_t n = 1; // Number of bytes to print.
+        char* arg1 = args;
+        char* arg2 = strchr(arg1, ' ');
+        if (arg2 != NULL)
+        {
+            *(arg2) = '\0';
+            arg2++; // Move pointer past '\0' character.
+            parse_failure = false;
+            n = parse_int_hex(arg2, &parse_failure);
+            if (parse_failure || n == 0)
+            {
+                // Either failed to parse int or user entered 0.
+                // Neither of which are allowed.
+                print_usage(cmd);
+                return;
+            }
+        }
+
+        parse_failure = false;
+        uint32_t addr = parse_int_hex(arg1, &parse_failure);
+        if (parse_failure)
+        {
+            print_usage(cmd);
+            return;
+        }
+        int i;
+        for (i = 0; i < n; i++)
+        {
+            if (i % 16 == 0)
+            {
+                print_newline();
+                print_u32_hex(addr + i);
+                print_string(": ");
+            }
+            if (i % 2 == 0)
+                print_char(' ');
+            uint8_t* addr_ptr = (uint8_t*)(addr + i);
+            print_byte_hex(*addr_ptr);
+        }
     }
     else
     {
         print_string("Unknown command: ");
         print_string(cmd);
+    }
+}
+
+void print_usage(char* cmd)
+{
+    if (strcmp(cmd, cmd_read) == 0)
+    {
+        print_string("R - Read bytes - Usage:\n");
+        print_string("\tR address [number of bytes]\n");
+        print_string("\t- address: memory address in hexadecimal to start reading at\n");
+        print_string("\t- [number of bytes]: A nonzero number of bytes to read in hexadecimal\n");
+        print_string("\t\timplicitly 1 if not specified\n");
+    }
+    else if (strcmp(cmd, cmd_write) == 0)
+    {
     }
 }
 
