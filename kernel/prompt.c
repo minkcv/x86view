@@ -105,6 +105,15 @@ void parse_command(char* cmd)
             print_byte_hex(*addr_ptr);
         }
     }
+    else if (strcmp(cmd, cmd_write) == 0)
+    {
+    }
+    else if (strcmp(cmd, cmd_help) == 0)
+    {
+        print_string("x86view by Will Smith github.com/minkcv/x86view\n");
+        print_usage(cmd_read);
+        print_usage(cmd_write);
+    }
     else
     {
         print_string("Unknown command: ");
@@ -112,7 +121,7 @@ void parse_command(char* cmd)
     }
 }
 
-void print_usage(char* cmd)
+void print_usage(const char* cmd)
 {
     if (strcmp(cmd, cmd_read) == 0)
     {

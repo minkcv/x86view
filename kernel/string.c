@@ -11,7 +11,7 @@ char* strcat(char* dest, char* src)
     return dest;
 }
 
-int strcmp(char* str1, char* str2)
+int strcmp(const char* str1, const char* str2)
 {
     size_t len1 = strlen(str1);
     size_t len2 = strlen(str2);
@@ -22,7 +22,7 @@ int strcmp(char* str1, char* str2)
     return strncmp(str1, str2, lower_length);
 }
 
-int strncmp(char* str1, char* str2, size_t num)
+int strncmp(const char* str1, const char* str2, size_t num)
 {
     int i;
     for (i = 0; i < num; i++)
@@ -43,7 +43,7 @@ char* strcpy(char* dest, char* src)
     return dest;
 }
 
-size_t strlen(char* str)
+size_t strlen(const char* str)
 {
     size_t length = 0;
     while (str[length] != '\0')

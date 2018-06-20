@@ -7,13 +7,13 @@
 
 char* strcat(char* dest, char* src);
 
-int strcmp(char* str1, char* str2);
+int strcmp(const char* str1, const char* str2);
 
-int strncmp(char* str1, char* str2, size_t num);
+int strncmp(const char* str1, const char* str2, size_t num);
 
 char* strcpy(char* dest, char* src);
 
-size_t strlen(char* str);
+size_t strlen(const char* str);
 
 char* strchr(char* str, char c);
 
