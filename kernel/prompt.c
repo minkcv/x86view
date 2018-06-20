@@ -98,8 +98,9 @@ void parse_command(char* cmd)
                 print_u32_hex(addr + i);
                 print_string(": ");
             }
-            if (i % 2 == 0)
+            if (i != 0 && i % 2 == 0 && i % 16 != 0)
                 print_char(' ');
+
             uint8_t* addr_ptr = (uint8_t*)(addr + i);
             print_byte_hex(*addr_ptr);
         }
@@ -117,12 +118,17 @@ void print_usage(char* cmd)
     {
         print_string("R - Read bytes - Usage:\n");
         print_string("\tR address [number of bytes]\n");
-        print_string("\t- address: memory address in hexadecimal to start reading at\n");
-        print_string("\t- [number of bytes]: A nonzero number of bytes to read in hexadecimal\n");
-        print_string("\t\timplicitly 1 if not specified\n");
+        print_string("\t- address: Memory address in hexadecimal to start reading at.\n");
+        print_string("\t- [number of bytes]: A nonzero number of bytes to read in hexadecimal.\n");
+        print_string("\t\tImplicitly 1 if not specified.\n");
     }
     else if (strcmp(cmd, cmd_write) == 0)
     {
+        print_string("W - Write bytes - Usage:\n");
+        print_string("W address values\n");
+        print_string("\taddress: Memory address in hexadecimal to write bytes to.\n");
+        print_string("\tvalues: Bytes to write to the memory address specified.\n");
+        print_string("\t\tMust be an even number of hex digits.\n");
     }
 }
 
