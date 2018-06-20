@@ -122,6 +122,47 @@ void parse_command(char* cmd)
             print_usage(cmd);
             return;
         }
+        char* arg1 = args;
+        char* arg2 = strchr(arg1, ' ');
+        size_t n_digits;
+        if (arg2 != NULL)
+        {
+            *(arg2) = '\0';
+            arg2++; // Move pointer past '\0' character.
+            parse_failure = false;
+            n_digits = strlen(arg2);
+            parse_int_hex(arg2, &parse_failure);
+            if (parse_failure || n_digits % 2 != 0)
+            {
+                // Either failed to parse int or user entered 
+                // a non even number of digits (need pairs to make bytes).
+                print_usage(cmd);
+                return;
+            }
+        }
+        else
+        {
+            // Second argument is required.
+            print_usage(cmd);
+            return;
+        }
+        uint32_t addr = parse_int_hex(arg1, &parse_failure);
+        if (parse_failure)
+        {
+            print_usage(cmd);
+            return;
+        }
+        // Convert pairs of hex digits to bytes and write to memory.
+        int i;
+        char* byte_str[2];
+        for (i = 0; i < n_digits; i += 2)
+        {
+            byte_str[0] = arg2[i];
+            byte_str[1] = arg2[i + 1];
+            uint8_t byte = parse_int_hex(byte_str, &parse_failure);
+            uint8_t* addr_ptr = (uint8_t*)addr + i / 2;
+            *addr_ptr = byte;
+        }
     }
     else
     {
