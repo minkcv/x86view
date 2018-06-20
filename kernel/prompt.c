@@ -53,17 +53,27 @@ void print_prompt()
 void parse_command(char* cmd)
 {
     print_newline();
-    bool parse_failure;
-    char* args = strchr(cmd, ' ');
-    if (args == NULL)
+    if (strcmp(cmd, cmd_help) == 0)
     {
-        print_usage(cmd);
+        print_string("\t\t\tx86view by Will Smith - github.com/minkcv/x86view\n\n");
+        print_usage(cmd_read);
+        print_usage(cmd_write);
         return;
     }
-    *(args) = '\0';
-    args++; // Move pointer past '\0' character.
+    bool parse_failure; // Used later when parsing ints.
+    char* args = strchr(cmd, ' ');
+    if (args != NULL)
+    {
+        *(args) = '\0';
+        args++; // Move pointer past '\0' character.
+    }
     if (strcmp(cmd, cmd_read) == 0)
     {
+        if (args == NULL)
+        {
+            print_usage(cmd);
+            return;
+        }
         uint32_t n = 1; // Number of bytes to print.
         char* arg1 = args;
         char* arg2 = strchr(arg1, ' ');
@@ -107,17 +117,15 @@ void parse_command(char* cmd)
     }
     else if (strcmp(cmd, cmd_write) == 0)
     {
-    }
-    else if (strcmp(cmd, cmd_help) == 0)
-    {
-        print_string("x86view by Will Smith github.com/minkcv/x86view\n");
-        print_usage(cmd_read);
-        print_usage(cmd_write);
+        if (args == NULL)
+        {
+            print_usage(cmd);
+            return;
+        }
     }
     else
     {
-        print_string("Unknown command: ");
-        print_string(cmd);
+        print_string("Unknown command or invalid syntax");
     }
 }
 

@@ -150,9 +150,25 @@ char get_char(uint8_t keycode)
 
 uint8_t get_key_nointr()
 {
-    while (!(inb(0x64) & 1));
-    return inb(0x60);
+    uint8_t flags;
+    while (true)
+    {
+        flags = inb(0x64);
+        if (flags & 1) // A new byte is available to read
+        {
+            if (flags & 0x20)
+            {
+                // A mouse event.
+                // Eat it out of port 0x60 and moveon.
+                inb(0x60);
+                continue;
+            }
+            // Must not be a mouse value if we're here.
+            return inb(0x60);
+        }
+    }
 }
+
 uint8_t get_key_intr()
 {
     // TODO
