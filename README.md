@@ -47,4 +47,12 @@ Disassembly of build/image/boot/kernel.bin
       100007:       90                      nop
     ...
 
-Hey look, that's where our program is loaded in memory. You can confirm this by finding 0x00100000 in the link.ld file.
+Hey look, that's where our program is loaded in memory and the bytes match. You can confirm this by finding 0x00100000 in the link.ld file.
+
+Write a single byte at address 0
+
+    > R 0 4
+    00000000: 53FF 00F0
+    > W 0 00
+    > R 0 4
+    00000000: 00FF 00F0
