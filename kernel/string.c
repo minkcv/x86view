@@ -64,6 +64,7 @@ char* strchr(char* str, char c)
 
 uint32_t parse_int(char* str, bool* failure)
 {
+    *failure = false;
     uint32_t value = 0;
     size_t length = strlen(str);
     int i;
@@ -86,6 +87,7 @@ uint32_t parse_int(char* str, bool* failure)
 
 uint32_t parse_int_hex(char* str, bool* failure)
 {
+    *failure = false;
     uint32_t value = 0;
     int i;
     size_t length = strlen(str);

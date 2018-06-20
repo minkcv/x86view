@@ -81,7 +81,6 @@ void parse_command(char* cmd)
         {
             *(arg2) = '\0';
             arg2++; // Move pointer past '\0' character.
-            parse_failure = false;
             n = parse_int_hex(arg2, &parse_failure);
             if (parse_failure || n == 0)
             {
@@ -92,7 +91,6 @@ void parse_command(char* cmd)
             }
         }
 
-        parse_failure = false;
         uint32_t addr = parse_int_hex(arg1, &parse_failure);
         if (parse_failure)
         {
@@ -129,7 +127,6 @@ void parse_command(char* cmd)
         {
             *(arg2) = '\0';
             arg2++; // Move pointer past '\0' character.
-            parse_failure = false;
             n_digits = strlen(arg2);
             parse_int_hex(arg2, &parse_failure);
             if (parse_failure || n_digits % 2 != 0)
@@ -153,13 +150,19 @@ void parse_command(char* cmd)
             return;
         }
         // Convert pairs of hex digits to bytes and write to memory.
+        char byte_str[3];
+        byte_str[2] = '\0';
         int i;
-        char* byte_str[2];
         for (i = 0; i < n_digits; i += 2)
         {
             byte_str[0] = arg2[i];
             byte_str[1] = arg2[i + 1];
             uint8_t byte = parse_int_hex(byte_str, &parse_failure);
+            if (parse_failure)
+            {
+                print_usage(cmd);
+                return;
+            }
             uint8_t* addr_ptr = (uint8_t*)addr + i / 2;
             *addr_ptr = byte;
         }
