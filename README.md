@@ -3,22 +3,15 @@
 No warranty is provided. See LICENSE.md for more info.
 
 ### Building and running on linux
-#### Install 
-    sudo apt install build-essential qemu nasm gcc-multilib
+Install Required dependencies:  
+Systems with apt should run: `sudo apt install build-essential qemu nasm gcc-multilib`
 
-#### Build
-    make
-
-#### Run
-Mount `build/image.iso` in virtualization software.
-Or run
-
-    make run
-
-to open in QEMU
+#### Build and Run
+Run `make` to build the utility and create an iso.  
+Run `make run` to open in QEMU. Or mount `build/image.iso` in virtualization software. 
 
 ### Usage
-Supported commands are `r` (read), `w` (write), and `help`.
+Supported commands are `R` (read), `W` (write), and `HELP`.
 #### R - Read bytes - Usage:
 R address [number of bytes]
 * address: Memory address in hexadecimal to start reading at.
@@ -55,6 +48,3 @@ Disassembly of build/image/boot/kernel.bin
     ...
 
 Hey look, that's where our program is loaded in memory. You can confirm this by finding 0x00100000 in the link.ld file.
-
-    phys = 0x001000000
-
