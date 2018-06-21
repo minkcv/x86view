@@ -61,8 +61,14 @@ void print_char(char c)
 
 void print_newline()
 {
-    uint8_t rows = (cursor_position / BYTES_PER_CHAR) / CONSOLE_COLS;
-    cursor_position = ((rows + 1) * CONSOLE_COLS) * BYTES_PER_CHAR;
+    uint8_t current_row = (cursor_position / BYTES_PER_CHAR) / CONSOLE_COLS;
+    if (current_row >= CONSOLE_ROWS - 1)
+    {
+        console_scroll_down();
+        cursor_position = current_row * CONSOLE_COLS * BYTES_PER_CHAR;
+    }
+    else
+        cursor_position = ((current_row + 1) * CONSOLE_COLS) * BYTES_PER_CHAR;
 }
 
 void console_backspace()
@@ -84,6 +90,16 @@ void console_clear()
         print_char(' ');
     }
     set_cursor_pos(0, 0);
+}
+
+void console_scroll_down()
+{
+    uint8_t* memptr = (uint8_t*) VIDEO_MEMORY_START;
+    uint8_t* memptr_second_line = memptr + BYTES_PER_CHAR * CONSOLE_COLS;
+    size_t all_lines_but_one = 
+        (BYTES_PER_CHAR * CONSOLE_COLS * CONSOLE_COLS) - 
+        (BYTES_PER_CHAR * CONSOLE_COLS);
+    memcpy(memptr, memptr_second_line, all_lines_but_one);
 }
 
 void set_cursor_pos(uint8_t row, uint8_t col)

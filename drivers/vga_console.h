@@ -27,6 +27,8 @@ void console_backspace();
 
 void console_clear();
 
+void console_scroll_down();
+
 void set_cursor_pos(uint8_t row, uint8_t col);
 
 #endif
