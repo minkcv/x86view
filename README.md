@@ -4,7 +4,7 @@ No warranty is provided. See LICENSE.md for more info.
 
 ### Building and running on linux
 Install Required dependencies:  
-Systems with apt should run: `sudo apt install build-essential qemu nasm gcc-multilib`
+Systems with apt should run: `sudo apt install build-essential qemu nasm gcc-multilib xorriso`
 
 #### Build and Run
 Run `make` to build the utility and create an iso.  
