@@ -1,6 +1,6 @@
 # x86view
 ### A bootable utility for poking around on x86 systems
-No warranty is provided. See LICENSE.md for more info.
+No warranty is provided. See LICENSE.md for more info. I have run this on one of my physical machines but I assume no responsibility for any damage to your machine. This utility literaly just lets you write to ram with no safeguards.
 
 ### Building and running on linux
 Install Required dependencies:  
