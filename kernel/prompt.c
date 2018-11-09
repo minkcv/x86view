@@ -1,6 +1,7 @@
 #include "prompt.h"
 #include "string.h"
 #include "memory.h"
+#include "io.h"
 #include "drivers/scancodes.h"
 #include "drivers/keyboard.h"
 #include "drivers/vga_console.h"
@@ -11,9 +12,12 @@
 
 void prompt_run()
 {
-    char* buffer = (char*)0x7E00; // TODO where to put this in memory?
+    uint8_t max_cmd_length = CONSOLE_COLS - 2;
+    char buffer[max_cmd_length];
+    memset(&buffer, 0, max_cmd_length);
     size_t length = 0;
     console_clear();
+    print_string("\t\t\tx86view by Will Smith - github.com/minkcv/x86view\n\n");
     print_prompt();
     while (true)
     {
@@ -32,13 +36,13 @@ void prompt_run()
             print_newline();
             print_prompt();
         }
-        else
+        else if (length < max_cmd_length)
         {
             char c = get_char(k);
             if (c != '\0')
             {
                 print_char(c);
-                strcat(buffer, &c);
+                buffer[length] = c;
                 length++;
             }
         }
@@ -187,8 +191,8 @@ void print_usage(const char* cmd)
     {
         print_string("W - Write bytes - Usage:\n");
         print_string("W address values\n");
-        print_string("\taddress: Memory address in hexadecimal to write bytes to.\n");
-        print_string("\tvalues: Bytes to write to the memory address specified.\n");
+        print_string("\t- address: Memory address in hexadecimal to write bytes to.\n");
+        print_string("\t- values: Bytes to write to the memory address specified.\n");
         print_string("\t\tMust be an even number of hex digits.\n");
     }
 }
