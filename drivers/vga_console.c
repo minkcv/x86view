@@ -53,6 +53,12 @@ void print_char(char c)
         print_newline();
         return;
     }
+    if (cursor_position == (CONSOLE_ROWS * CONSOLE_COLS * BYTES_PER_CHAR) - BYTES_PER_CHAR)
+    {
+        console_scroll_down();
+        cursor_position -= CONSOLE_COLS * BYTES_PER_CHAR;
+    }
+
     uint8_t* memptr = (uint8_t*) VIDEO_MEMORY_START + cursor_position;
     memset(memptr, c, 1);
     memset(memptr + 1, VGA_WHITE_ON_BLACK, 1);

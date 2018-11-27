@@ -87,6 +87,11 @@ uint32_t parse_int(char* str, bool* failure)
 
 uint32_t parse_int_hex(char* str, bool* failure)
 {
+    if (str == NULL)
+    {
+        *failure = true;
+        return 0;
+    }
     *failure = false;
     uint32_t value = 0;
     int i;

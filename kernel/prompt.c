@@ -59,10 +59,10 @@ void parse_command(char* cmd)
     print_newline();
     if (strcmp(cmd, cmd_help) == 0)
     {
-        print_string("\t\t\tx86view by Will Smith - github.com/minkcv/x86view\n\n");
         print_usage(cmd_read);
         print_usage(cmd_write);
         print_usage(cmd_jump);
+        print_usage(cmd_find);
         return;
     }
     bool parse_failure; // Used later when parsing ints.
@@ -187,9 +187,89 @@ void parse_command(char* cmd)
         }
         asm volatile ("jmp %0" : : "a"(addr));
     }
+    else if (strcmp(cmd, cmd_find) == 0)
+    {
+        if (args == NULL)
+        {
+            print_usage(cmd);
+            return;
+        }
+        char* arg1 = args;
+        char* arg2 = strchr(arg1, ' ');
+        if (arg2 != NULL)
+        {
+            // Advance past the space.
+            *(arg2) = '\0';
+            arg2++;
+        }
+        else
+        {
+            print_usage(cmd);
+            return;
+        }
+        char* arg3 = strchr(arg2, ' ');
+        size_t n_digits;
+        if (arg3 != NULL)
+        {
+            *(arg3) = '\0';
+            arg3++; // Move past '\0'
+            n_digits = strlen(arg3);
+            parse_int_hex(arg3, &parse_failure);
+            if (parse_failure || n_digits % 2 != 0)
+            {
+                // Failure to parse
+                print_usage(cmd);
+                return;
+            }
+        }
+        else
+        {
+            print_usage(cmd);
+            return;
+        }
+        uint32_t start_address = parse_int_hex(arg1, &parse_failure);
+        uint32_t end_address = parse_int_hex(arg2, &parse_failure);
+        if (parse_failure)
+        {
+            print_usage(cmd);
+            return;
+        }
+        uint32_t i;
+        char byte_str[3];
+        byte_str[2] = '\0';
+        bool first = true;
+        for (i = start_address; i < end_address; i++)
+        {
+            bool match = true;
+            uint8_t n;
+            for (n = 0; n < n_digits; n += 2)
+            {
+                byte_str[0] = arg3[n];
+                byte_str[1] = arg3[n + 1];
+                uint8_t byte = parse_int_hex(byte_str, &parse_failure);
+                if (parse_failure)
+                {
+                    print_usage(cmd);
+                    return;
+                }
+                if ((*(uint8_t*)(i + n / 2)) != byte)
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+            {
+                if (!first)
+                    print_string(", ");
+                print_u32_hex(i);
+                first = false;
+            }
+        }
+    }
     else
     {
-        print_string("Unknown command or invalid syntax");
+        print_string("Unknown command. Try HELP");
     }
 }
 
@@ -206,7 +286,7 @@ void print_usage(const char* cmd)
     else if (strcmp(cmd, cmd_write) == 0)
     {
         print_string("W - Write bytes - Usage:\n");
-        print_string("W address values\n");
+        print_string("\tW address values\n");
         print_string("\t- address: Memory address in hexadecimal to write bytes to.\n");
         print_string("\t- values: Bytes to write to the memory address specified.\n");
         print_string("\t\tMust be an even number of hex digits.\n");
@@ -214,8 +294,16 @@ void print_usage(const char* cmd)
     else if (strcmp(cmd, cmd_jump) == 0)
     {
         print_string("J - Jump to address - Usage:\n");
-        print_string("J address\n");
-        print_string("\t- address: Absolute memory address in hexadecimal to jump to and start executing.\n");
+        print_string("\tJ address\n");
+        print_string("\t- address: Absolute memory address in hex to jump to and start executing.\n");
+    }
+    else if (strcmp(cmd, cmd_find) == 0)
+    {
+        print_string("FIND - Find a sequence of bytes in memory - Usage:\n");
+        print_string("\tFIND start end sequence\n");
+        print_string("\t- start: Memory address to start searching at.\n");
+        print_string("\t- end: Memory address to stop searching at.\n");
+        print_string("\t- sequence: Sequence of bytes to search for between the start and end.\n");
     }
 }
 

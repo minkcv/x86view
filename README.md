@@ -24,7 +24,13 @@ W address values
 
 #### J - Jump to address
 J address
-* address: Absolute memory address in hexadecimal to jump to and start executing. 
+* address: Absolute memory address in hex to jump to and start executing. 
+
+#### FIND - Find a sequence of bytes in memory - Usage:
+FIND start end sequence
+* start: Memory address to start searching at.
+* end: Memory address to stop searching at.
+* sequence: Sequence of bytes to search for between start and end.
 
 ### Examples
 #### Reading
