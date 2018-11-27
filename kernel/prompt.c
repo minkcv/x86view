@@ -215,7 +215,7 @@ void print_usage(const char* cmd)
     {
         print_string("J - Jump to address - Usage:\n");
         print_string("J address\n");
-        print_string("\t- address: Memory address in hexadecimal to jump to and start executing.\n");
+        print_string("\t- address: Absolute memory address in hexadecimal to jump to and start executing.\n");
     }
 }
 

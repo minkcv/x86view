@@ -24,7 +24,7 @@ W address values
 
 #### J - Jump to address
 J address
-* address: Memory address in hexadecimal to jump to and start executing. 
+* address: Absolute memory address in hexadecimal to jump to and start executing. 
 
 ### Examples
 #### Reading
@@ -45,7 +45,8 @@ Read 8 bytes at address 100000
     0010000: BC0C 4010 00EB 0D90
 
 These 8 bytes are actually the x86 instructions for this program. You can disassemble this program in linux and see that they match.
-Disassembly of build/image/boot/kernel.bin
+
+Disassembly of build/image/boot/kernel.bin:
 
     $ objdump -d build/boot.o
 
@@ -67,7 +68,11 @@ Write a single byte at address 0
     00000000: 00FF 00F0
 
 #### Jumping
-Now for the fun part. Jumping. You can jump code execution to any address using the `J` command.
+Now for the fun part. You can start code execution at any address using the `J` command. 
+
+This is a far, absolute, indirect jump, where the destination is stored in eax. The jump instruction is `FF E0`.
+
+The command:
 
     > J 100000
 
@@ -88,11 +93,6 @@ Now lets assemble it and disassemble it to see the hexadecimal representation:
     $ nasm -f elf -o test.bin test.asm
     $ objdump -d test.bin
 
-    test.bin:     file format elf32-i386
-
-
-    Disassembly of section .text:
-
     00000000 <.text>:
        0:	b8 00 00 10 00       	mov    $0x100000,%eax
        5:	ff e0                	jmp    *%eax
@@ -103,5 +103,6 @@ And finally we will enter it in our machine that has booted x86view. I chose the
     > W 505 FFE0
     > J 500
 
-And it clears the screen and prints the welcome message and prompt. Now we know how to enter programs directly into memory as hexadecimal and execute them.
+And it clears the screen and prints the welcome message and prompt. Now we know how to enter programs directly into memory as hexadecimal x86 instructions and execute them.
+
 
