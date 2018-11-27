@@ -3,6 +3,7 @@
 
 static const char cmd_read[] = "R";
 static const char cmd_write[] = "W";
+static const char cmd_jump[] = "J";
 static const char cmd_help[] = "HELP";
 
 void prompt_run();

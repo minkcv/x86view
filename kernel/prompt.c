@@ -62,6 +62,7 @@ void parse_command(char* cmd)
         print_string("\t\t\tx86view by Will Smith - github.com/minkcv/x86view\n\n");
         print_usage(cmd_read);
         print_usage(cmd_write);
+        print_usage(cmd_jump);
         return;
     }
     bool parse_failure; // Used later when parsing ints.
@@ -171,6 +172,21 @@ void parse_command(char* cmd)
             *addr_ptr = byte;
         }
     }
+    else if (strcmp(cmd, cmd_jump) == 0)
+    {
+        if (args == NULL)
+        {
+            print_usage(cmd);
+            return;
+        }
+        uint32_t addr = parse_int_hex(args, &parse_failure);
+        if (parse_failure)
+        {
+            print_usage(cmd);
+            return;
+        }
+        asm volatile ("jmp %0" : : "a"(addr));
+    }
     else
     {
         print_string("Unknown command or invalid syntax");
@@ -194,6 +210,12 @@ void print_usage(const char* cmd)
         print_string("\t- address: Memory address in hexadecimal to write bytes to.\n");
         print_string("\t- values: Bytes to write to the memory address specified.\n");
         print_string("\t\tMust be an even number of hex digits.\n");
+    }
+    else if (strcmp(cmd, cmd_jump) == 0)
+    {
+        print_string("J - Jump to address - Usage:\n");
+        print_string("J address\n");
+        print_string("\t- address: Memory address in hexadecimal to jump to and start executing.\n");
     }
 }
 
