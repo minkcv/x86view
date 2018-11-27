@@ -117,5 +117,20 @@ And finally we will enter it in our machine that has booted x86view. I chose the
     > J 500
 
 And it clears the screen and prints the welcome message and prompt. Now we know how to enter programs directly into memory as hexadecimal x86 instructions and execute them.
-It is also possible to modify the x86view code itself, assuming that you aren't trying to modify code that writes to memory.
+
+#### Finding
+It is also possible to modify the x86view code itself. We know the jump command uses the instruction `FF E0` to jump to an address.
+We use the Find command to look between 0x100000 and 0x200000 for the bytes `FFE0`:
+
+    > FIND 100000 200000 FFE0
+    00100AF5, 00101207, 00106E02
+
+And get 3 results.  
+I'll save you time time of checking and tell you that 0x100AF5 is the address that the jump command calls.
+We can use the Write command to replace these bytes with x86 [NOP](https://en.wikipedia.org/wiki/NOP_(code))s (0x90).
+
+    > W 100AF5 9090
+    > J 100000
+
+And you will notice that the jump instruction doesn't actually jump us to the address now, it just prints the next prompt.
 
