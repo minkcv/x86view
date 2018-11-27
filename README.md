@@ -67,6 +67,13 @@ Write a single byte at address 0
     > R 0 4
     00000000: 00FF 00F0
 
+We can also write directly to the screen memory. 
+0xB8000 is the start address of the screen memory and 0x01 is a smiley face in the [VGA Standard](https://en.wikipedia.org/wiki/Code_page_437)
+
+    > W B8000 01
+
+Should show a smiley face in the top left corner.
+
 #### Jumping
 Now for the fun part. You can start code execution at any address using the `J` command. 
 
@@ -104,5 +111,5 @@ And finally we will enter it in our machine that has booted x86view. I chose the
     > J 500
 
 And it clears the screen and prints the welcome message and prompt. Now we know how to enter programs directly into memory as hexadecimal x86 instructions and execute them.
-
+It is also possible to modify the x86view code itself, assuming that you aren't trying to modify code that writes to memory.
 
