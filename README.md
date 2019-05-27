@@ -48,21 +48,32 @@ Read 32 bytes (20 in hex) at address 0
 Read 8 bytes at address 100000
 
     > R 100000 8
-    0010000: BC0C 4010 00EB 0D90
+    0010000: BC00 5010 00EB 0D90 02BO AD1B 0300 0000
 
-These 8 bytes are actually the x86 instructions for this program. You can disassemble this program in linux and see that they match.
+Some of these bytes are actually the x86 instructions for this program. You can disassemble this program in linux and see that they match.
 
 Disassembly of build/image/boot/kernel.bin:
 
     $ objdump -d build/boot.o
 
-    00100000 <code>:
-      100000:       bc 0c 40 10 00          mov    $0x10400c,%esp
-      100005:       eb 0d                   jmp    100014 <stublet>
-      100007:       90                      nop
-    ...
+    build/boot.o:     file format elf32-i386
 
-The bytes match. You can also find 0x00100000 in the link.ld file.
+    Disassembly of section .text:
+
+    00000000 <start>:
+    0:   bc 00 20 00 00          mov    $0x2000,%esp
+    5:   eb 0d                   jmp    14 <stublet>
+    7:   90                      nop
+
+    00000008 <mboot>:
+     8:   02 b0 ad 1b 03 00       add    0x31bad(%eax),%dh
+     e:   00 00                   add    %al,(%eax)
+    10:   fb                      sti
+    11:   4f                      dec    %edi
+    12:   52                      push   %edx
+    13:   e4                      .byte 0xe4
+
+The bytes match up after 8 bytes. You can also find 0x00100000 in the link.ld file.
 
 #### Writing
 Write a single byte at address 0
@@ -123,13 +134,13 @@ It is also possible to modify the x86view code itself. We know the jump command 
 We use the Find command to look between 0x100000 and 0x200000 for the bytes `FFE0`:
 
     > FIND 100000 200000 FFE0
-    00100AF5, 00101207, 00106E02
+    001009C0, 001057D7, 001058BB
 
 And get 3 results.  
-I'll save you time time of checking and tell you that 0x100AF5 is the address that the jump command calls.
+I'll save you time time of checking and tell you that 001009C0 is the address that the jump command calls.
 We can use the Write command to replace these bytes with x86 [NOP](https://en.wikipedia.org/wiki/NOP_(code))s (0x90).
 
-    > W 100AF5 9090
+    > W 1009C0 9090
     > J 100000
 
 And you will notice that the jump instruction doesn't actually jump us to the address now, it just prints the next prompt.
