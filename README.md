@@ -2,6 +2,8 @@
 ### A bootable utility for poking around on x86 systems
 No warranty is provided. See LICENSE.md for more info. I have run this on one of my physical machines but I assume no responsibility for any damage to your machine. This utility lets you write to ram and jump to arbitrary addresses with no safeguards.
 
+![screenshot](./screenshot.png)
+
 ### Building and running on linux
 Install Required dependencies:  
 Systems with apt should run: `sudo apt install build-essential qemu nasm gcc-multilib xorriso grub-pc-bin`
@@ -11,7 +13,7 @@ Run `make` to build the utility and create an iso.
 Run `make run` to open in QEMU. Or mount `build/image.iso` in virtualization software. 
 
 ### Usage
-Supported commands are `R` (read), `W` (write), `J` (jump) and `HELP`.
+Supported commands are `R` (read), `W` (write), `J` (jump), `FIND` and `HELP`.
 #### R - Read bytes - Usage:
 R address [number of bytes]
 * address: Memory address in hexadecimal to start reading at.
